@@ -56,7 +56,7 @@ public class DirePayClient(
             ["command"] = "fiat_payment",
             ["hashCode"] = hashCode,
             ["callback_url"] = order.CallbackUrl.AbsoluteUri,
-            ["redirect_url"] = order.RedirectUrl.AbsoluteUri,
+            //["redirect_url"] = order.RedirectUrl.AbsoluteUri,
             ["currency"] = order.Currency,
             ["method"] = order.Method,
             ["customer_uid"] = order.PlayerCode,
