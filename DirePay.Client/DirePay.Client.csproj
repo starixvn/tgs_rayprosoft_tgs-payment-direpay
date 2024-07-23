@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	<RootNamespace>Tgs.Payment.DirePay.Client</RootNamespace>
+	<Version>0.0.1</Version>
+	<Authors>Raypro</Authors>
+	<Company>Raypro</Company>
+	<PackageId>Tgs.Payment.DirePay.Client</PackageId>
+	<PackageProjectUrl>https://gitlab.com/rayprosoft/tgs-payment-direpay</PackageProjectUrl>
+	<RepositoryUrl>https://gitlab.com/rayprosoft/tgs-payment-direpay</RepositoryUrl>
+	<PackageTags>Tgs Payment DirePay</PackageTags>
+  </PropertyGroup>
+
+</Project>

@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+	<GlobalNugetConfig>$(UserProfile)\AppData\Roaming\NuGet\NuGet.Config</GlobalNugetConfig>
+	<GlobalNugetConfig Condition="'$(UserProfile)'==''">$(HOME)/.nuget/NuGet/NuGet.Config</GlobalNugetConfig>
+	<UserSecretsId>2d393ca5-3b11-4ad9-9c2c-20799764e95a</UserSecretsId>
+	<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+
+	<ItemGroup>
+		<PackageReference Include="FluentdForward.OpenTelemetry.MessagePack" Version="0.3.8" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.20.1" />
+		<PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.9.28">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.8.0" />
+		<PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.8.0" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.8.1" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.8.1" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.Runtime" Version="1.8.0" />
+		<PackageReference Include="ProfileViewer.OpenTelemetry.Exporter" Version="0.3.1" />
+		<PackageReference Include="PhoenixToolkits.MessageQueue.Nats" Version="2.2.0" />
+		<PackageReference Include="Tgs.MessageQueue.Nats.Serializers" Version="0.0.2" />
+		<PackageReference Include="Tgs.WebApi.Toolkits" Version="0.4.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\DirePay.Core\DirePay.Core.csproj" />
+	</ItemGroup>	
+	
+</Project>

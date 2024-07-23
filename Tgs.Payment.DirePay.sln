@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.Payment.DirePay", "Tgs.Payment.DirePay\Tgs.Payment.DirePay.csproj", "{EC7F7667-508E-4979-99FE-FEAC2B13AC7B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B521D8B4-16B4-406C-A333-A3A750B9FE1B}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		CodeMaid.config = CodeMaid.config
+		nuget.config = nuget.config
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DirePay.Core", "DirePay.Core\DirePay.Core.csproj", "{782E9BA2-E62E-4644-ACF0-ADE7CB0DF7EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DirePay.Client", "DirePay.Client\DirePay.Client.csproj", "{C35CB47F-7C5C-4249-A51E-649A97016E4F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DirePay.Core.UnitTests", "DirePay.Core.UnitTests\DirePay.Core.UnitTests.csproj", "{0EC32EB8-3751-4A81-A879-D5BFA22DACC6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DirePayTest", "DirePayTest\DirePayTest.csproj", "{DEAEC582-F409-4F99-9C55-4CB78D49B704}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tgs.Payment.DirePay.IntegrationTests", "Tgs.Payment.DirePay.IntegrationTests\Tgs.Payment.DirePay.IntegrationTests.csproj", "{2CF9888A-6C6D-4F8C-B8AB-337508D5314C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EC7F7667-508E-4979-99FE-FEAC2B13AC7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC7F7667-508E-4979-99FE-FEAC2B13AC7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC7F7667-508E-4979-99FE-FEAC2B13AC7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC7F7667-508E-4979-99FE-FEAC2B13AC7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{782E9BA2-E62E-4644-ACF0-ADE7CB0DF7EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{782E9BA2-E62E-4644-ACF0-ADE7CB0DF7EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{782E9BA2-E62E-4644-ACF0-ADE7CB0DF7EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{782E9BA2-E62E-4644-ACF0-ADE7CB0DF7EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C35CB47F-7C5C-4249-A51E-649A97016E4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C35CB47F-7C5C-4249-A51E-649A97016E4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C35CB47F-7C5C-4249-A51E-649A97016E4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C35CB47F-7C5C-4249-A51E-649A97016E4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EC32EB8-3751-4A81-A879-D5BFA22DACC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EC32EB8-3751-4A81-A879-D5BFA22DACC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EC32EB8-3751-4A81-A879-D5BFA22DACC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EC32EB8-3751-4A81-A879-D5BFA22DACC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEAEC582-F409-4F99-9C55-4CB78D49B704}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEAEC582-F409-4F99-9C55-4CB78D49B704}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEAEC582-F409-4F99-9C55-4CB78D49B704}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEAEC582-F409-4F99-9C55-4CB78D49B704}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CF9888A-6C6D-4F8C-B8AB-337508D5314C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CF9888A-6C6D-4F8C-B8AB-337508D5314C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CF9888A-6C6D-4F8C-B8AB-337508D5314C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CF9888A-6C6D-4F8C-B8AB-337508D5314C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F786E143-E649-49FB-9BB3-68EC626E4B79}
+	EndGlobalSection
+EndGlobal
