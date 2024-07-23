@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 	<RootNamespace>Tgs.Payment.DirePay.Client</RootNamespace>
-	<Version>0.0.1</Version>
+	<Version>0.0.2</Version>
 	<Authors>Raypro</Authors>
 	<Company>Raypro</Company>
 	<PackageId>Tgs.Payment.DirePay.Client</PackageId>
