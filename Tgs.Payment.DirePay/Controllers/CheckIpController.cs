@@ -11,11 +11,8 @@ public class CheckIpController: ControllerBase
     {
         var ip = HttpContext.Connection.RemoteIpAddress!.ToString();
 
-        using HttpClient client = new HttpClient
-        {
-            BaseAddress = new Uri("https://api64.ipify.org?format=json")
-        };
-        var result = await client.GetStringAsync(ip);
+        using HttpClient client = new HttpClient();
+        var result = await client.GetStringAsync("https://api.ipify.org?format=json");
 
         return Results.Json(new
         {
