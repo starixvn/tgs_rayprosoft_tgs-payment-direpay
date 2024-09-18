@@ -45,7 +45,6 @@ public class DirePayClient(
         DepositOrder order,
         CancellationToken cancellationToken = default)
     {
-        httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Json));
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         var source = $"fiat_payment{secret}";
@@ -94,7 +93,6 @@ public class DirePayClient(
         WithdrawOrder order,
         CancellationToken cancellationToken = default)
     {
-        httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Json));
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         var source = $"fiat_withdrawal{secret}";
