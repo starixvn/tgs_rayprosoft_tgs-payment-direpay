@@ -1,4 +1,5 @@
-﻿using FluentdForward.OpenTelemetry.MessagePack;
+﻿using System.Net.Mime;
+using FluentdForward.OpenTelemetry.MessagePack;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.Extensions.Options;
 using NATS.Client.Core;
@@ -64,7 +65,7 @@ builder.Services
         .AddProcessor(
             ProcessorTypes.DepositProcessorType,
             "tgs.payment.direpay.deposit",
-            "tgs.payment.direpay.deposit")        
+            "tgs.payment.direpay.deposit")
         .AddProcessor(
             ProcessorTypes.WithdrawProcessorType,
             "tgs.payment.direpay.withdraw",
@@ -80,9 +81,10 @@ builder.Services
     .AddHttpLogging(logging =>
     {
         logging.LoggingFields = HttpLoggingFields.All;
-        logging.MediaTypeOptions.AddText("application/x-www-form-urlencoded");
-        logging.MediaTypeOptions.AddText("text/html");
-        logging.MediaTypeOptions.AddText("multipart/form-data");
+        logging.MediaTypeOptions.AddText(MediaTypeNames.Application.FormUrlEncoded);
+        logging.MediaTypeOptions.AddText(MediaTypeNames.Application.Json);
+        logging.MediaTypeOptions.AddText(MediaTypeNames.Text.Html);
+        logging.MediaTypeOptions.AddText(MediaTypeNames.Multipart.FormData);
     })
     .AddHealthChecks()
     .Services
@@ -112,7 +114,7 @@ builder.Services
 
 var app = builder.Build();
 
-app.UseHttpLogging();
+app.UseWhen(context => !(context.Request.Path.StartsWithSegments("/healthz") && context.Response.StatusCode == 200), app => app.UseHttpLogging());
 app.MapControllers();
 app.MapHealthChecks("/healthz");
 app.MapProfileViewer();

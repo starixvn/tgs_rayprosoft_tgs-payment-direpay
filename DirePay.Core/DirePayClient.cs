@@ -25,7 +25,7 @@ public class DirePayClient(
         };
 
         var response = await httpClient
-            .PostAsJsonAsync($"/api/login", requestBody, cancellationToken)
+            .PostAsJsonAsync("api/login", requestBody, cancellationToken)
             .ConfigureAwait(false);
 
         _ = response.EnsureSuccessStatusCode();
@@ -63,12 +63,11 @@ public class DirePayClient(
             ["depositor_name"] = order.PlayerRealName,
             ["amount"] = order.Amount.ToString(),
             ["txid"] = order.FormId.ToString(),
-            ["bank_code"] = order.BankCode,
-            ["phone_number"] = order.Currency == "BDT" ? order.PhoneNumber : ""
+            ["bank_code"] = order.BankCode
         };
 
         var response = await httpClient
-            .PostAsJsonAsync("/api/callBack", requestBody, cancellationToken)
+            .PostAsJsonAsync("api/callBack", requestBody, cancellationToken)
             .ConfigureAwait(false);
 
         var body = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
@@ -117,7 +116,7 @@ public class DirePayClient(
         };
 
         var response = await httpClient
-            .PostAsJsonAsync("/api/callBack", requestBody, cancellationToken)
+            .PostAsJsonAsync("api/callBack", requestBody, cancellationToken)
             .ConfigureAwait(false);
 
         var body = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
@@ -195,7 +194,7 @@ public class DirePayClient(
         };
 
         var response = await httpClient
-            .PostAsJsonAsync($"/api/callBack", requestBody, cancellationToken)
+            .PostAsJsonAsync("api/callBack", requestBody, cancellationToken)
             .ConfigureAwait(false);
 
         _ = response.EnsureSuccessStatusCode();
