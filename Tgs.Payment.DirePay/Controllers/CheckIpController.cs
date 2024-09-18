@@ -7,7 +7,7 @@ namespace Tgs.Payment.DirePay.Controllers;
 public class CheckIpController: ControllerBase
 {
     [HttpGet]
-    public IResult CheckIp()
+    public async Task<IResult> CheckIpAsync()
     {
         var ip = HttpContext.Connection.RemoteIpAddress!.ToString();
 
@@ -15,12 +15,12 @@ public class CheckIpController: ControllerBase
         {
             BaseAddress = new Uri("https://api64.ipify.org?format=json")
         };
-        var result = client.GetStringAsync(ip);
+        var result = await client.GetStringAsync(ip);
 
         return Results.Json(new
         {
             yourIp = ip,
-            serviceIp = result.ToString()
+            serviceIp = result
         });
     }
 }
