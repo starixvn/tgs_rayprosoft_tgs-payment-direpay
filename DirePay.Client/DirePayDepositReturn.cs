@@ -20,4 +20,8 @@ public record DirePayDepositReturn
     public string Type { get; set; } = default!;
 
     public decimal AfterExchangeOrderAmount { get; set; }
+
+    public string ReceiveAccountName { get; set; } = default!;
+
+    public string ReceiveBankAccount { get; set; } = default!;
 }

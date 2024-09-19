@@ -12,7 +12,7 @@ using Tgs.Payment.DirePay;
 using Tgs.Payment.DirePay.MessageQueue;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.WebHost.UseSentry();
 builder.Logging
     .AddOpenTelemetry(options =>
     {
@@ -28,7 +28,6 @@ builder.Logging
                 () => Environment.MachineName));
         });
     });
-
 builder.Services
     .AddControllers();
 

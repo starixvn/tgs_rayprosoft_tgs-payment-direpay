@@ -69,6 +69,8 @@ public class DepositController(ILogger<DepositController> logger) : ControllerBa
             PlayerCode = request.CustomerUid,
             Method = request.Method,
             Type = request.Type,
+            ReceiveAccountName = "DirePay",
+            ReceiveBankAccount = depositForm.ApplyInfo?.Settings?.Email ?? "",
             AfterExchangeOrderAmount = orderAmount / exchangeRate,
         };
 
