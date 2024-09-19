@@ -28,6 +28,7 @@ builder.Logging
                 () => Environment.MachineName));
         });
     });
+builder.Services.AddMemoryCache();
 builder.Services
     .AddControllers();
 

@@ -2,12 +2,14 @@
 using System.Net.Http.Json;
 using System.Net.Mime;
 using System.Text.Json.Nodes;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 
 namespace Tgs.Payment.DirePay;
 
 public class DirePayClient(
     HttpClient httpClient,
+    IMemoryCache memoryCache,
     DirePayHasher hasher,
     ILogger<DirePayClient> logger)
 {
@@ -176,6 +178,23 @@ public class DirePayClient(
         string token,
         string secret,
         CancellationToken cancellationToken = default)
+    {
+        return await QueryBalanceFromCacheAsync(token, secret, cancellationToken);
+    }
+
+    private async Task<IReadOnlyDictionary<string, decimal>> QueryBalanceFromCacheAsync(string token,
+        string secret,
+        CancellationToken cancellationToken = default)
+    {
+        var cacheKey = $"DIRE-PAY-BALANCE-{secret}";
+        return await memoryCache.GetOrCreateAsync(cacheKey, async entry =>
+        {
+            entry.SetAbsoluteExpiration(TimeSpan.FromSeconds(30));
+            return await QueryBalanceFromApiAsync(token, secret, cancellationToken);
+        });
+    }
+
+    private async Task<IReadOnlyDictionary<string, decimal>> QueryBalanceFromApiAsync(string token, string secret, CancellationToken cancellationToken)
     {
         httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Json));
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
