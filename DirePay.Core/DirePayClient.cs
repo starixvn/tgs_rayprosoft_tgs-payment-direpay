@@ -217,6 +217,8 @@ public class DirePayClient(
             dict[fiat.Key] = decimal.Parse(fiat.Value!.GetValue<string>());
         }
 
+        logger.LogInformation("DirePayClient Balance: {body}", body);
+
         return dict;
     }
 }
