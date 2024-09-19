@@ -76,7 +76,7 @@ public class WithdrawController(ILogger<WithdrawController> logger) : Controller
 
         switch (paymentReturn.Status)
         {
-            case "completed"://完成
+            case "completed":
                 if (fsm.CanFire(PaymentTrigger.PaymentWithdrawCompleted))
                 {
                     await fsm.FireAsync(PaymentTrigger.PaymentWithdrawCompleted).ConfigureAwait(false);
@@ -94,8 +94,7 @@ public class WithdrawController(ILogger<WithdrawController> logger) : Controller
                 }
 
                 break;
-
-            case "rejected"://拒絕
+            case "rejected":
                 if (fsm.CanFire(PaymentTrigger.Reject))
                 {
                     await fsm.FireAsync(PaymentTrigger.Reject).ConfigureAwait(false);
@@ -112,6 +111,9 @@ public class WithdrawController(ILogger<WithdrawController> logger) : Controller
                 break;
 
             default:
+                logger.LogWarning("FormId:{formId}, payment Status:{status}",
+                    formId,
+                    paymentReturn.Status);
                 break;
         }
 

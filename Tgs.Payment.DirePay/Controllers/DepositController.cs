@@ -26,9 +26,6 @@ public class DepositController(ILogger<DepositController> logger) : ControllerBa
 
         var request = JsonSerializer.Deserialize<CallbackViewModel>(source.ToString()!)!;
 
-        if (request.TxId == "4567")
-            return true;
-
         var formId = Guid.Parse(request.TxId);
 
         var depositForm = await getService
@@ -37,8 +34,8 @@ public class DepositController(ILogger<DepositController> logger) : ControllerBa
 
         if (depositForm == null)
         {
-            logger.LogWarning("Can't found deposit form({id}).", formId);
-            return false;
+            logger.LogError("Can't found deposit form({id}).", formId);
+            return true;
         }
 
         var secret = depositForm.ApplyInfo!.Settings.Secret;
@@ -55,8 +52,8 @@ public class DepositController(ILogger<DepositController> logger) : ControllerBa
 
         if (sign != hash)
         {
-            logger.LogWarning("Sign value invalid. input: {sign}, compute: {hash}", sign, hash);
-            return false;
+            logger.LogError("Sign value invalid. input: {sign}, compute: {hash}", sign, hash);
+            return true;
         }
 
         var orderAmount = decimal.Parse(request.RequestAmount);
@@ -79,7 +76,7 @@ public class DepositController(ILogger<DepositController> logger) : ControllerBa
 
         switch (paymentReturn.Status)
         {
-            case "completed"://完成
+            case "completed":
                 if (fsm.CanFire(PaymentTrigger.PaymentDepositCompleted))
                 {
                     await fsm.FireAsync(PaymentTrigger.PaymentDepositCompleted).ConfigureAwait(false);
@@ -97,8 +94,8 @@ public class DepositController(ILogger<DepositController> logger) : ControllerBa
                 }
 
                 break;
-
-            case "expired"://付款等待超过截止时间，只适用于付款回调
+            case "rejected":
+            case "expired":
                 if (fsm.CanFire(PaymentTrigger.Reject))
                 {
                     await fsm.FireAsync(PaymentTrigger.Reject).ConfigureAwait(false);
@@ -119,6 +116,9 @@ public class DepositController(ILogger<DepositController> logger) : ControllerBa
                 break;
 
             default:
+                logger.LogWarning("FormId:{formId}, payment Status:{status}",
+                    formId,
+                    paymentReturn.Status);
                 break;
         }
 

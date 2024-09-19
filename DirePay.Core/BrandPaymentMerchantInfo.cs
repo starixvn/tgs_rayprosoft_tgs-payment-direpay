@@ -8,5 +8,5 @@ public record BrandPaymentMerchantInfo(
     string Password,
     [property: JsonPropertyName("secret")]
     string Secret,
-    [property: JsonPropertyName("currency")]
+    [property: JsonPropertyName("currencyCode")]
     string Currency);
