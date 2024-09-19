@@ -16,8 +16,6 @@ public class DirePayClient(
         string password,
         CancellationToken cancellationToken = default)
     {
-        httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Json));
-
         var requestBody = new Dictionary<string, string>
         {
             { "email", email},
