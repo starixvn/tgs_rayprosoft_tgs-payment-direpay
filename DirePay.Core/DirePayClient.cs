@@ -1,9 +1,13 @@
-﻿using System.Net.Http.Headers;
+﻿using System.Net;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Net.Mime;
+using System.Text.Json;
 using System.Text.Json.Nodes;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using Tgs.Logging;
 
 namespace Tgs.Payment.DirePay;
 
@@ -11,6 +15,7 @@ public class DirePayClient(
     HttpClient httpClient,
     IMemoryCache memoryCache,
     DirePayHasher hasher,
+    ITgsLog tgsLog,
     ILogger<DirePayClient> logger)
 {
     public async ValueTask<string> GetAuthorizationTokenAsync(
@@ -55,7 +60,7 @@ public class DirePayClient(
             ["command"] = "fiat_payment",
             ["hashCode"] = hashCode,
             ["callback_url"] = order.CallbackUrl.AbsoluteUri,
-            //["redirect_url"] = order.RedirectUrl.AbsoluteUri,
+            ["redirect_url"] = order.RedirectUrl.AbsoluteUri,
             ["currency"] = order.Currency,
             ["method"] = order.Method,
             ["customer_uid"] = order.PlayerCode,
@@ -65,11 +70,16 @@ public class DirePayClient(
             ["bank_code"] = order.BankCode
         };
 
-        var response = await httpClient
+        var (timeExecution, response) = await CalculateTimeExcuteAsync(async () =>
+        {
+            return await httpClient
             .PostAsJsonAsync("api/callBack", requestBody, cancellationToken)
             .ConfigureAwait(false);
+        });
 
         var body = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+
+        LogApi(requestBody, timeExecution, response, body, order.FormId.ToString(), "api/callback", httpClient.BaseAddress?.ToString() ?? string.Empty);
 
         logger.LogInformation("DirePayClient Deposit response Body:{body}", body);
 
@@ -85,6 +95,28 @@ public class DirePayClient(
             PayUrl: node["pay_url"]!.GetValue<string>(),
             Method: node["method"]!.GetValue<string>(),
             AuthCode: node["auth_code"]?.GetValue<string>());
+    }
+
+    private void LogApi(Dictionary<string, string?> formContent, int timeExecute, HttpResponseMessage response, string rawBody, string trackingId, string path, string prefix)
+    {
+        var apiCall = new ApiLogEvent
+        {
+            ExecutionTimeMs = timeExecute,
+            Ip = GetIPAddress(),
+            Method = "POST",
+            Path = path,
+            Prefix = prefix,
+            RecordedOn = DateTimeOffset.Now,
+            RequestContent = JsonSerializer.Serialize(formContent),
+            RequestHeaders = string.Empty,
+            ResponseCode = (short)response.StatusCode,
+            ResponseContent = rawBody,
+            ResponseHeaders = JsonSerializer.Serialize(response.Headers),
+            ServerName = Environment.MachineName,
+            TrackingId = Guid.Parse(trackingId),
+        };
+
+        tgsLog.LogApi(apiCall);
     }
 
     public async ValueTask<DirePayClientWithdrawResponse> WithdrawAsync(
@@ -113,11 +145,15 @@ public class DirePayClient(
             ["bank_code"] = order.BankCode,
         };
 
-        var response = await httpClient
+        var (timeExecution, response) = await CalculateTimeExcuteAsync(async () =>
+        {
+            return await httpClient
             .PostAsJsonAsync("api/callBack", requestBody, cancellationToken)
             .ConfigureAwait(false);
+        });
 
         var body = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+        LogApi(requestBody, timeExecution, response, body, order.FormId.ToString(), "api/callback", httpClient.BaseAddress?.ToString() ?? string.Empty);
 
         logger.LogInformation("DirePayClient Withdraw response Body:{body}", body);
 
@@ -235,5 +271,22 @@ public class DirePayClient(
         }
 
         return dict;
+    }
+
+    private static async Task<(int timeExecute, T result)> CalculateTimeExcuteAsync<T>(Func<Task<T>> function)
+    {
+        var timeStart = DateTimeOffset.Now;
+        var result = await function().ConfigureAwait(false);
+        var timeEnd = DateTimeOffset.Now;
+
+        return (((int)timeEnd.Subtract(timeStart).TotalMilliseconds), result);
+    }
+
+    public static string GetIPAddress()
+    {
+        IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
+        IPAddress? ipAddress = ipHostInfo.AddressList.FirstOrDefault();
+
+        return ipAddress?.ToString() ?? string.Empty;
     }
 }
