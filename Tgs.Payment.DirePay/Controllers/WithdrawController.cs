@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
+using Tgs.Logging.Extensions;
 using Tgs.Payment.Clients;
 using Tgs.Payment.DirePay.ApplicationServices;
 using Tgs.Payment.DirePay.Client;
@@ -27,6 +28,7 @@ public class WithdrawController(ILogger<WithdrawController> logger) : Controller
         var request = JsonSerializer.Deserialize<CallbackViewModel>(source.ToString()!)!;
 
         var formId = Guid.Parse(request.TxId);
+        HttpContext.AddTrackingId(formId);
 
         var withdrawForm = await getService
             .GetAsync(new(formId), HttpContext.RequestAborted)

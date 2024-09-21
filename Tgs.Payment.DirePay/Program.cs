@@ -7,6 +7,7 @@ using OpenTelemetry.Instrumentation.AspNetCore;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using Tgs.Logging.DependencyInjection;
 using Tgs.MessageQueue.Nats.Serializers;
 using Tgs.Payment.DirePay;
 using Tgs.Payment.DirePay.MessageQueue;
@@ -30,6 +31,7 @@ builder.Logging
     });
 builder.Services.AddMemoryCache();
 builder.Services
+    .AddTgsLogWithHttpLogging(options => builder.Configuration.GetSection("TgsApiLog").Bind(options))
     .AddControllers();
 
 builder.Services
@@ -133,5 +135,7 @@ app.Use(async (context, next) =>
         _ = await stream.ReadToEndAsync().ConfigureAwait(false);
     }
 });
+
+app.UseTgsApiLoggerMiddleware();
 
 app.Run();
