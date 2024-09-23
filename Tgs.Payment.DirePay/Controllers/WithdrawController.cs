@@ -28,8 +28,6 @@ public class WithdrawController(ILogger<WithdrawController> logger) : Controller
         var request = JsonSerializer.Deserialize<CallbackViewModel>(source.ToString()!)!;
 
         var formId = Guid.Parse(request.TxId);
-        HttpContext.AddTrackingId(formId);
-        HttpContext.AddRequestContent(source.ToString() ?? string.Empty);
 
         var withdrawForm = await getService
             .GetAsync(new(formId), HttpContext.RequestAborted)
@@ -120,7 +118,6 @@ public class WithdrawController(ILogger<WithdrawController> logger) : Controller
                 break;
         }
 
-        HttpContext.AddResponseContent("true");
         return true;
     }
 }

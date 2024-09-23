@@ -29,7 +29,6 @@ public class DepositController(ILogger<DepositController> logger) : ControllerBa
 
         var formId = Guid.Parse(request.TxId);
         HttpContext.AddTrackingId(formId);
-        HttpContext.AddRequestContent(source.ToString() ?? string.Empty);
 
         var depositForm = await getService
             .GetAsync(new(formId), HttpContext.RequestAborted)
@@ -127,7 +126,6 @@ public class DepositController(ILogger<DepositController> logger) : ControllerBa
                 break;
         }
 
-        HttpContext.AddResponseContent("true");
         return true;
     }
 }
