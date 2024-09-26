@@ -17,7 +17,7 @@ public class WithdrawTests(ITestOutputHelper testOutputHelper)
     private readonly ITestOutputHelper _testOutputHelper = testOutputHelper ?? throw new ArgumentNullException(nameof(testOutputHelper));
 
     [Fact]
-    public async Task 代付回調_訂單狀態失敗()
+    public async Task Withdrawal_TransactionExpired_RejectWithdrawal()
     {
         var fakePaymentServiceClient = Substitute.For<IPaymentServiceClient>();
         var fakePaymentClient = Substitute.For<IPaymentClient>();
@@ -104,7 +104,7 @@ public class WithdrawTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public async Task 代付回調_訂單狀態成功()
+    public async Task Withdrawal_HandleTransactionSuccess_ApproveWithdrawal()
     {
         var fakePaymentServiceClient = Substitute.For<IPaymentServiceClient>();
         var fakePaymentClient = Substitute.For<IPaymentClient>();

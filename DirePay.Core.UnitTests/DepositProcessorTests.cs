@@ -1,8 +1,12 @@
 ﻿using System.Net;
 using System.Text.Json;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
+using NSubstitute;
 using RichardSzalay.MockHttp;
+using Tgs.Logging;
+using Tgs.Payment.Clients;
 using Tgs.Payment.DirePay;
 using Tgs.Payment.DirePay.Client;
 using Tgs.Payment.DirePay.MessageQueue;
@@ -17,13 +21,17 @@ public class DepositProcessorTests
     {
         // Arrange
         var mockHttp = new MockHttpMessageHandler();
+        var mockTgsLog = Substitute.For<ITgsLog>();
+        var mockMemoryCache = Substitute.For<IMemoryCache>();
 
         var httpClient = mockHttp.ToHttpClient();
         httpClient.BaseAddress = new Uri("https://localhost");
 
         var fakePayClient = new DirePayClient(
             httpClient,
+            mockMemoryCache,
             new DirePayHasher(NullLogger<DirePayHasher>.Instance),
+            mockTgsLog,
             NullLogger<DirePayClient>.Instance);
 
         var options = new DirePayOptions

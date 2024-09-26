@@ -15,13 +15,7 @@ public class GetBalanceProcessorTests
         // Arrange
         var mockHttp = new MockHttpMessageHandler();
 
-        var httpClient = mockHttp.ToHttpClient();
-        httpClient.BaseAddress = new Uri("https://localhost");
-
-        var fakePayClient = new DirePayClient(
-            httpClient,
-            new DirePayHasher(NullLogger<DirePayHasher>.Instance),
-            NullLogger<DirePayClient>.Instance);
+        var fakePayClient = DirePayClientFactory.CreateDirePayClient(mockHttp);
 
         var sut = new GetBalanceProcessor(fakePayClient);
 
@@ -32,7 +26,7 @@ public class GetBalanceProcessorTests
                     "email": "email",
                     "password": "password",
                     "secret": "secret",
-                    "currency": "VND"
+                    "currencyCode": "VND"
                 }
                 """
         };

@@ -15,7 +15,7 @@ namespace Tgs.Payment.DirePay.IntegrationTests;
 public class DepositTests(ITestOutputHelper testOutputHelper)
 {
     [Fact]
-    public async Task 代收回調_訂單狀態expired()
+    public async Task Deposit_TransactionExpired_RejectDeposit()
     {
         var fakePaymentServiceClient = Substitute.For<IPaymentServiceClient>();
         var fakePaymentClient = Substitute.For<IPaymentClient>();
@@ -106,7 +106,7 @@ public class DepositTests(ITestOutputHelper testOutputHelper)
                 Arg.Any<CancellationToken>());
     }
     [Fact]
-    public async Task 代收回調_訂單狀態completed()
+    public async Task Deposit_HandleTransactionSuccess_ApproveDeposit()
     {
         var fakePaymentServiceClient = Substitute.For<IPaymentServiceClient>();
         var fakePaymentClient = Substitute.For<IPaymentClient>();

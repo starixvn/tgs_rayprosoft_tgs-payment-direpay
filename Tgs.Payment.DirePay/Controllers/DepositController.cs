@@ -1,6 +1,5 @@
 ﻿using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
-using Tgs.Logging.Extensions;
 using Tgs.Payment.Clients;
 using Tgs.Payment.DirePay.ApplicationServices;
 using Tgs.Payment.DirePay.Client;

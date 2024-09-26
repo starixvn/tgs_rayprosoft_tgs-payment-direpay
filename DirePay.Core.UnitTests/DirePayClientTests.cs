@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using Microsoft.Extensions.Logging.Abstractions;
 using RichardSzalay.MockHttp;
 using Tgs.Payment.DirePay;
 
@@ -7,15 +6,12 @@ namespace DirePay.Core.UnitTests;
 
 public class DirePayClientTests
 {
+
     [Fact]
     public async Task 授權()
     {
         var mockHttp = new MockHttpMessageHandler();
-        var httpClient = mockHttp.ToHttpClient();
-        httpClient.BaseAddress = new Uri(uriString: "https://localhost");
-        var signer = new DirePayHasher(NullLogger<DirePayHasher>.Instance);
-
-        var sut = new DirePayClient(httpClient, signer, NullLogger<DirePayClient>.Instance);
+        var sut = CreateDirePayClient(mockHttp);
 
         var email = "email";
         var password = "password";
@@ -32,15 +28,14 @@ public class DirePayClientTests
         Assert.Equal("token", actual);
     }
 
+    private static DirePayClient CreateDirePayClient(MockHttpMessageHandler mockHttp) => DirePayClientFactory.CreateDirePayClient(mockHttp);
+
     [Fact]
     public async Task 餘額查詢()
     {
         var mockHttp = new MockHttpMessageHandler();
-        var httpClient = mockHttp.ToHttpClient();
-        httpClient.BaseAddress = new Uri(uriString: "https://localhost");
-        var signer = new DirePayHasher(NullLogger<DirePayHasher>.Instance);
 
-        var sut = new DirePayClient(httpClient, signer, NullLogger<DirePayClient>.Instance);
+        var sut = CreateDirePayClient(mockHttp);
 
         var token = "token";
         var secret = "secret";
@@ -89,11 +84,7 @@ public class DirePayClientTests
     public async Task 交易查詢_代收expired()
     {
         var mockHttp = new MockHttpMessageHandler();
-        var httpClient = mockHttp.ToHttpClient();
-        httpClient.BaseAddress = new Uri(uriString: "https://localhost");
-        var signer = new DirePayHasher(NullLogger<DirePayHasher>.Instance);
-
-        var sut = new DirePayClient(httpClient, signer, NullLogger<DirePayClient>.Instance);
+        var sut = CreateDirePayClient(mockHttp);
 
         var token = "token";
         var secret = "secret";
@@ -124,11 +115,8 @@ public class DirePayClientTests
     public async Task 交易查詢_代收pending()
     {
         var mockHttp = new MockHttpMessageHandler();
-        var httpClient = mockHttp.ToHttpClient();
-        httpClient.BaseAddress = new Uri(uriString: "https://localhost");
-        var signer = new DirePayHasher(NullLogger<DirePayHasher>.Instance);
 
-        var sut = new DirePayClient(httpClient, signer, NullLogger<DirePayClient>.Instance);
+        var sut = CreateDirePayClient(mockHttp);
 
         var token = "token";
         var secret = "secret";
@@ -159,11 +147,7 @@ public class DirePayClientTests
     public async Task 交易查詢_代付pending()
     {
         var mockHttp = new MockHttpMessageHandler();
-        var httpClient = mockHttp.ToHttpClient();
-        httpClient.BaseAddress = new Uri(uriString: "https://localhost");
-        var signer = new DirePayHasher(NullLogger<DirePayHasher>.Instance);
-
-        var sut = new DirePayClient(httpClient, signer, NullLogger<DirePayClient>.Instance);
+        var sut = CreateDirePayClient(mockHttp);
 
         var token = "token";
         var secret = "secret";
@@ -194,11 +178,7 @@ public class DirePayClientTests
     public async Task 代收()
     {
         var mockHttp = new MockHttpMessageHandler();
-        var httpClient = mockHttp.ToHttpClient();
-        httpClient.BaseAddress = new Uri(uriString: "https://localhost");
-        var signer = new DirePayHasher(NullLogger<DirePayHasher>.Instance);
-
-        var sut = new DirePayClient(httpClient, signer, NullLogger<DirePayClient>.Instance);
+        var sut = CreateDirePayClient(mockHttp);
 
         var token = "token";
         var secret = "secret";
@@ -237,11 +217,7 @@ public class DirePayClientTests
     public async Task 代付()
     {
         var mockHttp = new MockHttpMessageHandler();
-        var httpClient = mockHttp.ToHttpClient();
-        httpClient.BaseAddress = new Uri(uriString: "https://localhost");
-        var signer = new DirePayHasher(NullLogger<DirePayHasher>.Instance);
-
-        var sut = new DirePayClient(httpClient, signer, NullLogger<DirePayClient>.Instance);
+        var sut = CreateDirePayClient(mockHttp);
 
         var token = "token";
         var secret = "secret";

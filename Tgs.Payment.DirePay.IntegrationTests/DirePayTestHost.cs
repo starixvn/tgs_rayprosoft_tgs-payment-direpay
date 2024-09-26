@@ -11,6 +11,7 @@ internal static class DirePayTestHost
 {
     public static WebApplicationFactory<Program> Factory => new WebApplicationFactory<Program>()
         .WithWebHostBuilder(hostBuilder => hostBuilder
+            .UseSentry("")
             .ConfigureLogging((_, logging) => logging.ClearProviders())
             .ConfigureAppConfiguration(configBuilder =>
             {

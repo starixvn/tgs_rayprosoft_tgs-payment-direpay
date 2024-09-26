@@ -16,6 +16,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DirePay.Core", "DirePay.Cor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DirePay.Client", "DirePay.Client\DirePay.Client.csproj", "{C35CB47F-7C5C-4249-A51E-649A97016E4F}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.Payment.DirePay.IntegrationTests", "Tgs.Payment.DirePay.IntegrationTests\Tgs.Payment.DirePay.IntegrationTests.csproj", "{B9B0DB98-3C24-4B68-B9A5-73AD2655E6E6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DirePay.Core.UnitTests", "DirePay.Core.UnitTests\DirePay.Core.UnitTests.csproj", "{E449BDD0-A4C3-4D30-80BF-3365A52780BD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,6 +38,14 @@ Global
 		{C35CB47F-7C5C-4249-A51E-649A97016E4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C35CB47F-7C5C-4249-A51E-649A97016E4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C35CB47F-7C5C-4249-A51E-649A97016E4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9B0DB98-3C24-4B68-B9A5-73AD2655E6E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9B0DB98-3C24-4B68-B9A5-73AD2655E6E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9B0DB98-3C24-4B68-B9A5-73AD2655E6E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9B0DB98-3C24-4B68-B9A5-73AD2655E6E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E449BDD0-A4C3-4D30-80BF-3365A52780BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E449BDD0-A4C3-4D30-80BF-3365A52780BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E449BDD0-A4C3-4D30-80BF-3365A52780BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E449BDD0-A4C3-4D30-80BF-3365A52780BD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

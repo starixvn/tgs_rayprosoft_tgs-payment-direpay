@@ -24,13 +24,7 @@ public class WithdrawProcessorTests
         // Arrange
         var mockHttp = new MockHttpMessageHandler();
 
-        var httpClient = mockHttp.ToHttpClient();
-        httpClient.BaseAddress = new Uri("https://localhost");
-
-        var fakePayClient = new DirePayClient(
-            httpClient,
-            new DirePayHasher(NullLogger<DirePayHasher>.Instance),            
-            NullLogger<DirePayClient>.Instance);
+        var fakePayClient = DirePayClientFactory.CreateDirePayClient(mockHttp);
 
         var fakePaymentClient = Substitute.For<IPaymentClient>();
         var options = new DirePayOptions
