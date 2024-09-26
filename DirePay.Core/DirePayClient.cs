@@ -4,7 +4,6 @@ using System.Net.Http.Json;
 using System.Net.Mime;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Tgs.Logging;
@@ -37,7 +36,7 @@ public class DirePayClient(
 
         var body = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
 
-        logger.LogInformation("DirePayClient Login response Body:{body}", body);
+        logger.LogInformation("DirePayClient Login response Body:{Body}", body);
 
         var node = JsonNode.Parse(body) ?? throw new ApiFailException("Login response can't read.");
 
@@ -81,10 +80,12 @@ public class DirePayClient(
 
         LogApi(requestBody, timeExecution, response, body, order.FormId.ToString(), "api/callback", httpClient.BaseAddress?.ToString() ?? string.Empty);
 
-        logger.LogInformation("DirePayClient Deposit response Body:{body}", body);
+        logger.LogInformation("DirePayClient Deposit response Body:{Body}", body);
 
-        if (response.IsSuccessStatusCode is false)
+        if (!response.IsSuccessStatusCode)
+        {
             throw new ApiFailException(body);
+        }    
 
         var node = JsonNode.Parse(body) ?? throw new ApiFailException("Deposit response can't read.");
 
@@ -99,6 +100,7 @@ public class DirePayClient(
 
     private void LogApi(Dictionary<string, string?> formContent, int timeExecute, HttpResponseMessage response, string rawBody, string trackingId, string path, string prefix)
     {
+        _  = formContent.Remove("hashCode");
         var apiCall = new ApiLogEvent
         {
             ExecutionTimeMs = timeExecute,
@@ -155,10 +157,12 @@ public class DirePayClient(
         var body = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
         LogApi(requestBody, timeExecution, response, body, order.FormId.ToString(), "api/callback", httpClient.BaseAddress?.ToString() ?? string.Empty);
 
-        logger.LogInformation("DirePayClient Withdraw response Body:{body}", body);
+        logger.LogInformation("DirePayClient Withdraw response Body:{Body}", body);
 
-        if (response.IsSuccessStatusCode is false)
+        if (!response.IsSuccessStatusCode)
+        {
             throw new ApiFailException(body);
+        }    
 
         var node = JsonNode.Parse(body) ?? throw new ApiFailException("Withdraw response can't read.");
 
@@ -194,7 +198,7 @@ public class DirePayClient(
 
         var body = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
 
-        logger.LogInformation("DirePayClient QueryTransaction response Body:{body}", body);
+        logger.LogInformation("DirePayClient QueryTransaction response Body:{Body}", body);
 
         var node = JsonNode.Parse(body) ?? throw new ApiFailException("Query Transaction response can't read.");
 
@@ -223,11 +227,11 @@ public class DirePayClient(
         CancellationToken cancellationToken = default)
     {
         var cacheKey = $"DIRE-PAY-BALANCE-{secret}";
-        return await memoryCache.GetOrCreateAsync(cacheKey, async entry =>
+        return (await memoryCache.GetOrCreateAsync(cacheKey, async entry =>
         {
-            entry.SetAbsoluteExpiration(TimeSpan.FromSeconds(30));
+            _ = entry.SetAbsoluteExpiration(TimeSpan.FromSeconds(30));
             return await QueryBalanceFromApiAsync(token, secret, cancellationToken);
-        });
+        }))!;
     }
 
     private async Task<IReadOnlyDictionary<string, decimal>> QueryBalanceFromApiAsync(string token, string secret, CancellationToken cancellationToken)
@@ -252,7 +256,7 @@ public class DirePayClient(
 
         var body = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
 
-        logger.LogInformation("DirePayClient QueryBalance response Body:{body}", body);
+        logger.LogInformation("DirePayClient QueryBalance response Body:{Body}", body);
 
         var node = JsonNode.Parse(body) ?? throw new ApiFailException("Query Balance response can't read.");
 

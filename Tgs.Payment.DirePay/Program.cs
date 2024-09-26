@@ -1,4 +1,5 @@
-﻿using System.Net.Mime;
+﻿using System.Net;
+using System.Net.Mime;
 using FluentdForward.OpenTelemetry.MessagePack;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.Extensions.Options;
@@ -7,7 +8,6 @@ using OpenTelemetry.Instrumentation.AspNetCore;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
-using Tgs.Logging.DependencyInjection;
 using Tgs.MessageQueue.Nats.Serializers;
 using Tgs.Payment.DirePay;
 using Tgs.Payment.DirePay.MessageQueue;
@@ -31,7 +31,8 @@ builder.Logging
     });
 builder.Services.AddMemoryCache();
 builder.Services
-    .AddTgsLogWithHttpLogging(options => builder.Configuration.GetSection("TgsApiLog").Bind(options))
+    .AddTgsLog()
+    .AddSingleton<TgsLogHandler>()
     .AddControllers();
 
 builder.Services
@@ -106,17 +107,29 @@ builder.Services
         .AddOtlpExporter())
     .Services
     .Configure<AspNetCoreTraceInstrumentationOptions>(options => options.Filter =
-        httpContext => !httpContext.Request.Path.HasValue
-            || !httpContext.Request.Path.StartsWithSegments("/swagger")
-            && !httpContext.Request.Path.StartsWithSegments("/healthz")
-            && !httpContext.Request.Path.StartsWithSegments("/metrics")
-            && !httpContext.Request.Path.StartsWithSegments("/profiler/")
-            && !new[] { "html", "ico", "png", "jpg" }.Any(
-                ext => httpContext.Request.Path.Value.EndsWith($".{ext}")));
+        httpContext =>
+        {
+            var path = httpContext.Request.Path;
+
+            if (!path.HasValue)
+            {
+                return true;
+            }
+
+            List<string> segmentExclude = ["/swagger", "/healthz", "/metrics", "/profiler/"];
+            if (segmentExclude.Exists(segment => path.StartsWithSegments(segment)))
+            {
+                return false;
+            }
+
+            List<string> postfixExlcude = ["html", "ico", "png", "jpg"];
+
+            return !postfixExlcude.Exists(postfix => path.Value.EndsWith(postfix));
+        });
 
 var app = builder.Build();
 
-app.UseWhen(context => !(context.Request.Path.StartsWithSegments("/healthz") && context.Response.StatusCode == 200), app => app.UseHttpLogging());
+app.UseWhen(context => !(context.Request.Path.StartsWithSegments("/healthz") && context.Response.StatusCode == ((int)HttpStatusCode.OK)), app => app.UseHttpLogging());
 app.MapControllers();
 app.MapHealthChecks("/healthz");
 app.MapProfileViewer();
@@ -136,6 +149,4 @@ app.Use(async (context, next) =>
     }
 });
 
-app.UseTgsApiLoggerMiddleware();
-
-app.Run();
+await app.RunAsync();
