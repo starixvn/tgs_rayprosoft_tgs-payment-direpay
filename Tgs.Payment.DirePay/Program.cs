@@ -38,14 +38,28 @@ builder.Services
 builder.Services
     .AddDirePay(
         (options, _) => builder.Configuration.GetSection("DirePay").Bind(options),
-        clientBuilder => clientBuilder
+        clientBuilder =>
+        {
+            clientBuilder
             .ConfigureHttpClient((sp, http) =>
             {
                 var options = sp.GetRequiredService<IOptions<DirePayOptions>>().Value;
 
                 http.BaseAddress = options.PaymentApiUrl;
             })
-            .AddLoggingHandler<DirePayOptions>())
+            .AddLoggingHandler<DirePayOptions>();
+
+            var proxy = builder.Configuration.GetValue<string>("Proxy");
+
+            if (proxy != null)
+            {
+                Console.WriteLine($"Use Proxy: {proxy}");
+                _ = clientBuilder.ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+                {
+                    Proxy = new WebProxy(proxy)
+                });
+            }
+        })
     .AddPaymentClient()
     .AddPaymentServiceClient(httpBuilder => httpBuilder
         .ConfigureHttpClient((sp, http) =>
